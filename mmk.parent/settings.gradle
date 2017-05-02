@@ -1,0 +1,3 @@
+include 'mmk'
+include 'mmk.ide'
+include 'mmk.tests'

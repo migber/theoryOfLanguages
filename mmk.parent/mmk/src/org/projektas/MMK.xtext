@@ -1,0 +1,9 @@
+grammar org.projektas.MMK with org.eclipse.xtext.common.Terminals
+
+generate mMK "http://www.projektas.org/MMK"
+
+Model:
+	greetings+=Greeting*;
+	
+Greeting:
+	'Hello' name=ID '!';
