@@ -3,7 +3,129 @@ grammar org.projektas.MMK with org.eclipse.xtext.common.Terminals
 generate mMK "http://www.projektas.org/MMK"
 
 Model:
-	greetings+=Greeting*;
+	"<MMK"
+	elements += AbstractElement*
+	"MMK>"
+	;
 	
-Greeting:
-	'Helllo' name=ID '!';
+AbstractElement:
+	Statement | Condition | WhileExpression
+;
+
+// Expresions 
+
+Statement:
+	Expression
+;
+
+Expression: 
+	( UnaryExpression | CreateExpression | AssignmentExpression | GetLineExpression | GetNumExpression | PrintExpression) 
+;
+
+GetLineExpression:
+	"c.getLine" what=Value
+;
+
+GetNumExpression:
+	"c.getNum" what=Value
+;
+
+PrintExpression:
+	"c.printL" what=Value
+;
+
+Value:
+	PrimitiveType
+;
+
+Variable:
+	name=QualifiedName
+;
+
+ExprBody:
+	expr+=(FactorExpression)+
+;
+
+FactorExpression:
+	l=Primary a+=Arithmetics*
+;
+
+Arithmetics:
+	m=("*" | "/" | "+" | "-") r=Primary
+;
+
+Primary:
+	UnaryExpression | '(' FactorExpr ')' 
+;
+
+UnaryExpression:
+	val=Value (us=UnarySuffix)?
+;
+
+Value:
+	var=[Variable|QualifiedName] | val=PrimitiveValue
+;
+
+CreationExpression:
+	type=Type name=Variable ("=" val=ExprBody)?
+;
+
+
+AssignmentExpression:
+	name=[Variable|QualifiedName] "=" val=ExprBody
+;
+
+// check the same as if
+
+Condition:
+	"check"  cond=ConditionalExpr 
+	 "<"
+		then+=(AbstractElement)*
+	">"
+	(=> "else" "<" 
+		else+=(AbstractElement)*
+	">")?
+;
+
+ConditionalExpr:
+	left=ExprBody op=("<" | "<=" | ">" | ">=" | "==" | "!=") right=ExprBody
+;
+
+
+// till loop represents while
+
+WhileExpression:
+	"till" end=ConditionalExpr 
+	 "<"
+		loop+=(AbstractElement)*
+	 ">" 
+;
+
+// misc
+
+PrimitiveType:
+	'num' | 'line'
+;
+
+PrimitiveValue:
+	INT | STRING
+;
+
+QualifiedName:
+	VAR_NAME
+;
+
+UnarySuffix:
+	"++" | "--"
+;
+
+//========= terminals
+terminal VAR_NAME:
+	('a'..'z') ('a'..'z'|'A'..'Z'|'_'|'0'..'9')*
+;
+
+terminal ML_COMMENT:
+	'#MMK' -> 'MMK#'
+;
+
+
