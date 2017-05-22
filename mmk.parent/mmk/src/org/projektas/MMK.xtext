@@ -4,12 +4,12 @@ generate mMK "http://www.projektas.org/MMK"
 
 Model:
 	"<MMK"
-	elements += AbstractElement*
+	elements += AbstractElement* 
 	"MMK>"
 	;
 	
 AbstractElement:
-	Statement | Condition | WhileExpression
+	Statement | Condition | WhileExpression | Operation
 ;
 
 // Expresions 
@@ -96,7 +96,16 @@ ConditionalExpr:
 	left=ExprBody op=("<" | "<=" | ">" | ">=" | "==" | "!=") right=ExprBody
 ;
 
-
+Operation:
+  '<F' name=QualifiedName 
+  '('(params+=QualifiedName 
+    (',' params+=QualifiedName)*)?')'
+  ':' type=Type 
+  '<'
+  body=Expression
+  '>'
+  'F>'
+  ;
 // till loop represents while
 
 WhileExpression:
