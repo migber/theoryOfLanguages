@@ -19,7 +19,11 @@ Statement:
 ;
 
 Expression: 
-	( UnaryExpression | CreateExpression | AssignmentExpression | GetLineExpression | GetNumExpression | PrintExpression) 
+	( UnaryExpression| CreationExpression | AssignmentExpression | GetLineExpression | GetNumExpression | PrintExpression) 
+;
+
+Type:
+	PrimitiveType
 ;
 
 GetLineExpression:
@@ -32,10 +36,6 @@ GetNumExpression:
 
 PrintExpression:
 	"c.printL" what=Value
-;
-
-Value:
-	PrimitiveType
 ;
 
 Variable:
@@ -57,6 +57,11 @@ Arithmetics:
 Primary:
 	UnaryExpression | '(' FactorExpr ')' 
 ;
+
+FactorExpr:
+	l=Primary a+=Arithmetics*
+;
+
 
 UnaryExpression:
 	val=Value (us=UnarySuffix)?

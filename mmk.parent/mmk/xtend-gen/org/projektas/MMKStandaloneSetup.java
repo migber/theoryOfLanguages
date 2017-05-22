@@ -11,7 +11,6 @@ import org.projektas.MMKStandaloneSetupGenerated;
 @SuppressWarnings("all")
 public class MMKStandaloneSetup extends MMKStandaloneSetupGenerated {
   public static void doSetup() {
-    MMKStandaloneSetup _mMKStandaloneSetup = new MMKStandaloneSetup();
-    _mMKStandaloneSetup.createInjectorAndDoEMFRegistration();
+    new MMKStandaloneSetup().createInjectorAndDoEMFRegistration();
   }
 }
